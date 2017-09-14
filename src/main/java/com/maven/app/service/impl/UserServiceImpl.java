@@ -11,20 +11,21 @@ import com.maven.app.service.UserService;
 @Service 
 public class UserServiceImpl implements UserService{
     
-    @Override
-    public String readExcelFile(MultipartFile file) {  
-        String result ="";  
-        //´´½¨´¦ÀíEXCELµÄÀà  
-        ReadExcel readExcel=new ReadExcel();  
-        //½âÎöexcel£¬»ñÈ¡ÉÏ´«µÄÊÂ¼şµ¥  
-        List<User> useList = readExcel.getExcelInfo(file);  
-        //ÖÁ´ËÒÑ¾­½«excelÖĞµÄÊı¾İ×ª»»µ½listÀïÃæÁË,½ÓÏÂÀ´¾Í¿ÉÒÔ²Ù×÷list,¿ÉÒÔ½øĞĞ±£´æµ½Êı¾İ¿â,»òÕßÆäËû²Ù×÷,  
-        //ºÍÄã¾ßÌåÒµÎñÓĞ¹Ø,ÕâÀï²»×ö¾ßÌåµÄÊ¾·¶  
-        if(useList != null && !useList.isEmpty()){  
-            result = "ÉÏ´«³É¹¦";  
-        }else{  
-            result = "ÉÏ´«Ê§°Ü";  
+    
+    @Override  
+        public String readExcelFile(MultipartFile file) {  
+            String result ="";  
+            //åˆ›å»ºå¤„ç†EXCELçš„ç±»  
+            ReadExcel readExcel=new ReadExcel();  
+            //è§£æexcelï¼Œè·å–ä¸Šä¼ çš„äº‹ä»¶å•  
+            List<User> useList = readExcel.getExcelInfo(file);  
+            //è‡³æ­¤å·²ç»å°†excelä¸­çš„æ•°æ®è½¬æ¢åˆ°listé‡Œé¢äº†,æ¥ä¸‹æ¥å°±å¯ä»¥æ“ä½œlist,å¯ä»¥è¿›è¡Œä¿å­˜åˆ°æ•°æ®åº“,æˆ–è€…å…¶ä»–æ“ä½œ,  
+            //å’Œä½ å…·ä½“ä¸šåŠ¡æœ‰å…³,è¿™é‡Œä¸åšå…·ä½“çš„ç¤ºèŒƒ  
+            if(useList != null && !useList.isEmpty()){  
+                result = "ä¸Šä¼ æˆåŠŸ";  
+            }else{  
+                result = "ä¸Šä¼ å¤±è´¥";  
+            }  
+            return result;  
         }  
-        return result;  
-    }  
 }

@@ -15,7 +15,7 @@ import com.maven.app.service.UserService;
 
 @Controller
 @RequestMapping("/user.do")
-public class UserController {
+public class UserController extends OrganizeBaseController{
     
     @Autowired  
     private UserService  userService;  
@@ -25,5 +25,9 @@ public class UserController {
     public String  upload(@RequestParam(value="file",required = false)MultipartFile file,HttpServletRequest request, HttpServletResponse response){  
         String result = userService.readExcelFile(file);  
         return result;  
-    }  
+    }
+    @RequestMapping("/index")
+    public String index(){
+        return "index";
+    }
 }

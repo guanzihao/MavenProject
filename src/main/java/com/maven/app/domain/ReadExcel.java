@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -15,38 +14,37 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
 
 public class ReadExcel {
-    //×ÜĞĞÊı  
+    //æ€»è¡Œæ•°  
     private int totalRows = 0;    
-    //×ÜÌõÊı  
+    //æ€»æ¡æ•°  
     private int totalCells = 0;   
-    //´íÎóĞÅÏ¢½ÓÊÕÆ÷  
+    //é”™è¯¯ä¿¡æ¯æ¥æ”¶å™¨  
     private String errorMsg;  
-    //¹¹Ôì·½·¨  
+    //æ„é€ æ–¹æ³•  
     public ReadExcel(){}  
-    //»ñÈ¡×ÜĞĞÊı  
+    //è·å–æ€»è¡Œæ•°  
     public int getTotalRows()  { return totalRows;}   
-    //»ñÈ¡×ÜÁĞÊı  
+    //è·å–æ€»åˆ—æ•°  
     public int getTotalCells() {  return totalCells;}   
-    //»ñÈ¡´íÎóĞÅÏ¢  
+    //è·å–é”™è¯¯ä¿¡æ¯  
     public String getErrorInfo() { return errorMsg; }    
       
   /** 
-   * ¶ÁEXCELÎÄ¼ş£¬»ñÈ¡ĞÅÏ¢¼¯ºÏ 
+   * è¯»EXCELæ–‡ä»¶ï¼Œè·å–ä¿¡æ¯é›†åˆ 
    * @param fielName 
    * @return 
    */  
     public List<User> getExcelInfo(MultipartFile mFile) {  
-        String fileName = mFile.getOriginalFilename();//»ñÈ¡ÎÄ¼şÃû  
-        List<User> userList =null;
+        String fileName = mFile.getOriginalFilename();//è·å–æ–‡ä»¶å  
         try {  
-            if (!validateExcel(fileName)) {// ÑéÖ¤ÎÄ¼şÃûÊÇ·ñºÏ¸ñ  
+            if (!validateExcel(fileName)) {// éªŒè¯æ–‡ä»¶åæ˜¯å¦åˆæ ¼  
                 return null;  
             }  
-            boolean isExcel2003 = true;// ¸ù¾İÎÄ¼şÃûÅĞ¶ÏÎÄ¼şÊÇ2003°æ±¾»¹ÊÇ2007°æ±¾  
+            boolean isExcel2003 = true;// æ ¹æ®æ–‡ä»¶ååˆ¤æ–­æ–‡ä»¶æ˜¯2003ç‰ˆæœ¬è¿˜æ˜¯2007ç‰ˆæœ¬  
             if (isExcel2007(fileName)) {  
                 isExcel2003 = false;  
             }  
-             userList = createExcel(mFile.getInputStream(), isExcel2003);  
+            List<User> userList = createExcel(mFile.getInputStream(), isExcel2003);  
         } catch (Exception e) {  
             e.printStackTrace();  
         }  
@@ -54,22 +52,21 @@ public class ReadExcel {
     }  
     
   /** 
-   * ¸ù¾İexcelÀïÃæµÄÄÚÈİ¶ÁÈ¡¿Í»§ĞÅÏ¢ 
-   * @param is ÊäÈëÁ÷ 
-   * @param isExcel2003 excelÊÇ2003»¹ÊÇ2007°æ±¾ 
+   * æ ¹æ®excelé‡Œé¢çš„å†…å®¹è¯»å–å®¢æˆ·ä¿¡æ¯ 
+   * @param is è¾“å…¥æµ 
+   * @param isExcel2003 excelæ˜¯2003è¿˜æ˜¯2007ç‰ˆæœ¬ 
    * @return 
    * @throws IOException 
    */  
-    public List<User> createExcel(InputStream is, boolean isExcel2003) {
-        List<User> userList =null;
+    public List<User> createExcel(InputStream is, boolean isExcel2003) {  
         try{  
             Workbook wb = null;  
-            if (isExcel2003) {// µ±excelÊÇ2003Ê±,´´½¨excel2003  
+            if (isExcel2003) {// å½“excelæ˜¯2003æ—¶,åˆ›å»ºexcel2003  
                 wb = new HSSFWorkbook(is);  
-            } else {// µ±excelÊÇ2007Ê±,´´½¨excel2007  
+            } else {// å½“excelæ˜¯2007æ—¶,åˆ›å»ºexcel2007  
                 wb = new XSSFWorkbook(is);  
             }  
-             userList = readExcelValue(wb);// ¶ÁÈ¡ExcelÀïÃæ¿Í»§µÄĞÅÏ¢  
+            List<User> userList = readExcelValue(wb);// è¯»å–Excelé‡Œé¢å®¢æˆ·çš„ä¿¡æ¯  
         } catch (IOException e) {  
             e.printStackTrace();  
         }  
@@ -77,83 +74,84 @@ public class ReadExcel {
     }  
     
   /** 
-   * ¶ÁÈ¡ExcelÀïÃæ¿Í»§µÄĞÅÏ¢ 
+   * è¯»å–Excelé‡Œé¢å®¢æˆ·çš„ä¿¡æ¯ 
    * @param wb 
    * @return 
    */  
     private List<User> readExcelValue(Workbook wb) {  
-        // µÃµ½µÚÒ»¸öshell  
+        // å¾—åˆ°ç¬¬ä¸€ä¸ªshell  
         Sheet sheet = wb.getSheetAt(0);  
-        // µÃµ½ExcelµÄĞĞÊı  
+        // å¾—åˆ°Excelçš„è¡Œæ•°  
         this.totalRows = sheet.getPhysicalNumberOfRows();  
-        // µÃµ½ExcelµÄÁĞÊı(Ç°ÌáÊÇÓĞĞĞÊı)  
+        // å¾—åˆ°Excelçš„åˆ—æ•°(å‰ææ˜¯æœ‰è¡Œæ•°)  
         if (totalRows > 1 && sheet.getRow(0) != null) {  
             this.totalCells = sheet.getRow(0).getPhysicalNumberOfCells();  
         }  
         List<User> userList = new ArrayList<User>();  
-        // Ñ­»·ExcelĞĞÊı  
+        // å¾ªç¯Excelè¡Œæ•°  
         for (int r = 1; r < totalRows; r++) {  
             Row row = sheet.getRow(r);  
             if (row == null){  
                 continue;  
             }  
             User user = new User();  
-            // Ñ­»·ExcelµÄÁĞ  
+            // å¾ªç¯Excelçš„åˆ—  
             for (int c = 0; c < this.totalCells; c++) {  
                 Cell cell = row.getCell(c);  
                 if (null != cell) {  
                     if (c == 0) {  
-                        //Èç¹ûÊÇ´¿Êı×Ö,±ÈÈçÄãĞ´µÄÊÇ25,cell.getNumericCellValue()»ñµÃÊÇ25.0,Í¨¹ı½ØÈ¡×Ö·û´®È¥µô.0»ñµÃ25  
-                        if(cell.getCellType() == Cell.CELL_TYPE_NUMERIC){  
+                        //å¦‚æœæ˜¯çº¯æ•°å­—,æ¯”å¦‚ä½ å†™çš„æ˜¯25,cell.getNumericCellValue()è·å¾—æ˜¯25.0,é€šè¿‡æˆªå–å­—ç¬¦ä¸²å»æ‰.0è·å¾—25  
+                        if(cell.getCellType() == HSSFCell.CELL_TYPE_NUMERIC){  
                             String name = String.valueOf(cell.getNumericCellValue());  
-                            user.setName(name.substring(0, name.length()-2>0?name.length()-2:1));//Ãû³Æ  
+                            user.setName(name.substring(0, name.length()-2>0?name.length()-2:1));//åç§°  
                         }else{  
-                            user.setName(cell.getStringCellValue());//Ãû³Æ  
+                            user.setName(cell.getStringCellValue());//åç§°  
                         }  
                     } else if (c == 1) {  
-                        if(cell.getCellType() == Cell.CELL_TYPE_NUMERIC){  
+                        if(cell.getCellType() == HSSFCell.CELL_TYPE_NUMERIC){  
                             String sex = String.valueOf(cell.getNumericCellValue());  
-                            user.setSex(sex.substring(0, sex.length()-2>0?sex.length()-2:1));//ĞÔ±ğ  
+                            user.setSex(sex.substring(0, sex.length()-2>0?sex.length()-2:1));//æ€§åˆ«  
                         }else{  
-                            user.setSex(cell.getStringCellValue());//ĞÔ±ğ  
+                            user.setSex(cell.getStringCellValue());//æ€§åˆ«  
                         }  
                     } else if (c == 2){  
-                        if(cell.getCellType() == Cell.CELL_TYPE_NUMERIC){  
+                        if(cell.getCellType() == HSSFCell.CELL_TYPE_NUMERIC){  
                             String age = String.valueOf(cell.getNumericCellValue());  
-                            user.setAge(age.substring(0, age.length()-2>0?age.length()-2:1));//ÄêÁä  
+                            user.setAge(age.substring(0, age.length()-2>0?age.length()-2:1));//å¹´é¾„  
                         }else{  
-                            user.setAge(cell.getStringCellValue());//ÄêÁä  
+                            user.setAge(cell.getStringCellValue());//å¹´é¾„  
                         }  
                     }  
                 }  
             }  
-            // Ìí¼Óµ½list  
+            // æ·»åŠ åˆ°list  
             userList.add(user);  
         }  
         return userList;  
     }  
       
     /** 
-     * ÑéÖ¤EXCELÎÄ¼ş 
+     * éªŒè¯EXCELæ–‡ä»¶ 
      *  
      * @param filePath 
      * @return 
      */  
     public boolean validateExcel(String filePath) {  
         if (filePath == null || !(isExcel2003(filePath) || isExcel2007(filePath))) {  
-            errorMsg = "ÎÄ¼şÃû²»ÊÇexcel¸ñÊ½";  
+            errorMsg = "æ–‡ä»¶åä¸æ˜¯excelæ ¼å¼";  
             return false;  
         }  
         return true;  
     }  
       
-    // @ÃèÊö£ºÊÇ·ñÊÇ2003µÄexcel£¬·µ»ØtrueÊÇ2003   
+    // @æè¿°ï¼šæ˜¯å¦æ˜¯2003çš„excelï¼Œè¿”å›trueæ˜¯2003   
     public static boolean isExcel2003(String filePath)  {    
          return filePath.matches("^.+\\.(?i)(xls)$");    
      }    
      
-    //@ÃèÊö£ºÊÇ·ñÊÇ2007µÄexcel£¬·µ»ØtrueÊÇ2007   
+    //@æè¿°ï¼šæ˜¯å¦æ˜¯2007çš„excelï¼Œè¿”å›trueæ˜¯2007   
     public static boolean isExcel2007(String filePath)  {    
          return filePath.matches("^.+\\.(?i)(xlsx)$");    
-     }   
+     }  
+    
 }

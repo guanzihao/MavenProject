@@ -3,8 +3,9 @@ package com.maven.app.service;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
+    
     /** 
-     * 读取excel中的数据,生成list 
+     * 璇诲彇excel涓殑鏁版嵁,鐢熸垚list 
      */  
     String readExcelFile( MultipartFile file);  
 }
