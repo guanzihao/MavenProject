@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -35,6 +36,7 @@ public class ReadExcel {
    * @return 
    */  
     public List<User> getExcelInfo(MultipartFile mFile) {  
+    	List<User> userList =null;
         String fileName = mFile.getOriginalFilename();//获取文件名  
         try {  
             if (!validateExcel(fileName)) {// 验证文件名是否合格  
@@ -44,7 +46,7 @@ public class ReadExcel {
             if (isExcel2007(fileName)) {  
                 isExcel2003 = false;  
             }  
-            List<User> userList = createExcel(mFile.getInputStream(), isExcel2003);  
+             userList = createExcel(mFile.getInputStream(), isExcel2003);  
         } catch (Exception e) {  
             e.printStackTrace();  
         }  
@@ -59,14 +61,15 @@ public class ReadExcel {
    * @throws IOException 
    */  
     public List<User> createExcel(InputStream is, boolean isExcel2003) {  
-        try{  
+    		List<User> userList =null;   
+    		try{  
             Workbook wb = null;  
             if (isExcel2003) {// 当excel是2003时,创建excel2003  
                 wb = new HSSFWorkbook(is);  
             } else {// 当excel是2007时,创建excel2007  
                 wb = new XSSFWorkbook(is);  
             }  
-            List<User> userList = readExcelValue(wb);// 读取Excel里面客户的信息  
+             userList = readExcelValue(wb);// 读取Excel里面客户的信息  
         } catch (IOException e) {  
             e.printStackTrace();  
         }  
